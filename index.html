@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en" >
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Salary Converter: LPA ↔ Monthly</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: #000;
+      color: #fff;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+
+    .container {
+      background: #111;
+      padding: 2rem;
+      border-radius: 1rem;
+      box-shadow: 0 8px 20px rgba(255, 255, 255, 0.1);
+      text-align: center;
+      max-width: 400px;
+      width: 100%;
+    }
+
+    input {
+      width: 100%;
+      padding: 0.7rem;
+      margin-top: 1rem;
+      margin-bottom: 1rem;
+      font-size: 1rem;
+      border: 2px solid #333;
+      border-radius: 8px;
+      background: #222;
+      color: #fff;
+    }
+
+    button {
+      padding: 0.6rem 1.5rem;
+      background: #00c853;
+      color: white;
+      font-weight: bold;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      margin: 0.5rem;
+      transition: background 0.3s;
+    }
+
+    button:hover {
+      background: #00b248;
+    }
+
+    #result {
+      margin-top: 1rem;
+      font-size: 1.2rem;
+      font-weight: bold;
+      color: #76ff03;
+      min-height: 1.5em;
+    }
+
+    #modeSwitch {
+      background: #2962ff;
+    }
+
+    #modeSwitch:hover {
+      background: #0039cb;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>💼 SalaryFlip</h1>
+    <button id="modeSwitch">Switch to LPA → Monthly</button>
+
+    <div id="inputSection">
+      <input type="number" id="salaryInput" placeholder="Enter Monthly Salary (₹)" min="0" />
+      <button id="calculateBtn">Calculate LPA</button>
+    </div>
+
+    <div id="result"></div>
+  </div>
+<script>
+  const modeSwitchBtn = document.getElementById("modeSwitch");
+  const salaryInput = document.getElementById("salaryInput");
+  const calculateBtn = document.getElementById("calculateBtn");
+  const resultDiv = document.getElementById("result");
+
+  let mode = true; // true = Monthly → LPA, false = LPA → Monthly
+
+  function calculate() {
+    const val = parseFloat(salaryInput.value);
+    if (!val || val <= 0) {
+      resultDiv.style.color = "red";
+      resultDiv.textContent = "❌ Enter a valid positive number.";
+      return;
+    }
+
+    if (mode) {
+      const annual = val * 12;
+      const lpa = (annual / 100000).toFixed(2);
+      resultDiv.style.color = "#76ff03";
+      resultDiv.textContent = `✅ ₹${val} per month = ₹${annual} / ${lpa} LPA`;
+    } else {
+      const monthly = (val * 100000) / 12;
+      resultDiv.style.color = "#76ff03";
+      resultDiv.textContent = `✅ ₹${val} LPA = ₹${Math.round(monthly)} per month`;
+    }
+  }
+
+  function toggleMode() {
+    mode = !mode;
+    resultDiv.textContent = "";
+    salaryInput.value = "";
+
+    if (mode) {
+      salaryInput.placeholder = "e.g. 45000 — Enter Monthly Salary (₹)";
+      calculateBtn.textContent = "Calculate LPA";
+      modeSwitchBtn.textContent = "Switch to LPA → Monthly";
+    } else {
+      salaryInput.placeholder = "e.g. 5.4 — Enter Annual Salary in LPA";
+      calculateBtn.textContent = "Calculate Monthly";
+      modeSwitchBtn.textContent = "Switch to Monthly → LPA";
+    }
+  }
+
+  calculateBtn.addEventListener("click", calculate);
+  modeSwitchBtn.addEventListener("click", toggleMode);
+
+  // Initialize placeholder on page load
+  toggleMode(); // This will set mode false, so call twice to reset to true
+  toggleMode();
+</script>
+
+
+
+</body>
+</html>
